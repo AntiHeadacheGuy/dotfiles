@@ -6,7 +6,7 @@
     <property name="screen" type="string" value="screen">
       <property name="Active" type="bool" value="true"/>
       <property name="EDID" type="string" value=""/>
-      <property name="Resolution" type="string" value="1366x768"/>
+      <property name="Resolution" type="string" value="1920x1080"/>
       <property name="RefreshRate" type="double" value="-nan"/>
       <property name="Rotation" type="int" value="0"/>
       <property name="Reflection" type="string" value="0"/>
@@ -25,7 +25,7 @@
     <property name="screen" type="string" value="screen">
       <property name="Active" type="bool" value="true"/>
       <property name="EDID" type="string" value=""/>
-      <property name="Resolution" type="string" value="1366x768"/>
+      <property name="Resolution" type="string" value="1920x1080"/>
       <property name="RefreshRate" type="double" value="-nan"/>
       <property name="Rotation" type="int" value="0"/>
       <property name="Reflection" type="string" value="0"/>
