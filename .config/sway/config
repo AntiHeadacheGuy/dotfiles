@@ -15,21 +15,20 @@ set $up k
 set $right l
 # Your preferred terminal emulator
 set $term kitty
-# Gaps
-gaps inner 5
-# Mouse warping
-mouse_warping container
-# Border
-default_border none
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu dmenu_path | wofi --show drun -I | xargs swaymsg exec --
+set $menu dmenu_path | rofi -show drun | xargs swaymsg exec --
+
+# Disable border
+default_border none
+# Gaps
+gaps inner 8
 
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /usr/share/backgrounds/background2.png fill
+output * bg /usr/share/backgrounds/wall2.jpg fill
 #
 # Example configuration:
 #
@@ -37,25 +36,15 @@ output * bg /usr/share/backgrounds/background2.png fill
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 
-### Fix for Window that should not be tiling
-for_window [app_id="gcolor3"] floating enable
-for_window [title="About Mozilla Firefox"] floating enable
-for_window [title="Anime Downloader"] floating enable
-#for_window [title="Pengaturan Sistem"] floating enable
-for_window [title="Ubah Kata Sandi "] floating enable
-
-### Polkit
-exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-
 ### Idle configuration
 #
 # Example configuration:
 #
-exec swayidle -w \
-         timeout 300 'swaylock -f -i /usr/share/backgrounds/background2.png' \
-         timeout 600 'exec systemctl suspend' \
-         before-sleep 'swaylock -f -i /usr/share/backgrounds/background2.png'
-
+# exec swayidle -w \
+#          timeout 300 'swaylock -f -c 000000' \
+#          timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+#          before-sleep 'swaylock -f -c 000000'
+#
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
@@ -68,7 +57,7 @@ exec swayidle -w \
        dwt enabled
        tap enabled
        natural_scroll enabled
-       middle_emulation disabled
+       middle_emulation enabled
    }
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
@@ -98,7 +87,7 @@ exec swayidle -w \
     bindsym $mod+Shift+c reload
 
     # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec wlogout
+    bindsym $mod+Shift+e exec wlogout 
 #
 # Moving around:
 #
@@ -150,6 +139,20 @@ exec swayidle -w \
     bindsym $mod+Shift+0 move container to workspace number 10
     # Note: workspaces can have any name you want, not just numbers.
     # We just use 1-10 as the default.
+#
+# Fn keys:
+#
+    bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+    bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+    bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+    bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+    bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+    bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
+    bindsym XF86AudioPlay exec playerctl play-pause
+    bindsym XF86AudioNext exec playerctl next
+    bindsym XF86AudioPrev exec playerctl previous
+    bindsym XF86Search exec $menu
+
 #
 # Layout stuff:
 #
@@ -211,35 +214,27 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
-#
-# Fn keys
-#
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
-bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
-bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
-bindsym XF86MonBrightnessUp exec brightnessctl set +5%
-bindsym XF86AudioPlay exec playerctl play-pause
-bindsym XF86AudioNext exec playerctl next
-bindsym XF86AudioPrev exec playerctl previous
-bindsym XF86Search exec bemenu-run
-bindsym XF86Mail exec wldash
-bindsym XF86WWW exec qutebrowser
-#
-# Print keys
-#
-bindsym Print exec grimshot save screen
 
 #
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
+
 bar {
-
-swaybar_command waybar
-
-position top
-
+    position top
+    swaybar_command waybar
 }
+
+#
+# Window configuration:
+#
+# class                 border      backgr.     text    indicator child_border
+client.focused          #1e66f5      #1e66f5      #4c4f69  #fe640b    #1e66f5
+client.focused_inactive #bcc0cc  #bcc0cc  #4c4f69  #04a5e5    #04a5e5
+client.unfocused        #bcc0cc      #bcc0cc      #4c4f69  #bcc0cc    #bcc0cc
+client.urgent           #d20f39      #d20f39      #eff1f5  #d20f39    #d20f39
+client.placeholder      #dce0e8      #dce0e8      #4c4f69  #dce0e8    #dce0e8
+client.background       #eff1f5
+
 include /etc/sway/config.d/*
+include /home/ss54/config/sway/config.d/*
